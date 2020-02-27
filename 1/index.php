@@ -8,7 +8,7 @@ $open = 0;
 $close = 0;
 $j = 0;
 
-for ($i = 0; $i < strlen($text); ++$i) {
+for ($i = 0; $i < strlen($text); $i++) {
     switch ($text[$i]) {
         case "+":
             $char[$index_char]++;
