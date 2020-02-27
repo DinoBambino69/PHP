@@ -34,9 +34,10 @@ for ($i = 0; $i < strlen($text); $i++) {
             break;
 
         case ",":
-            $array[$index_char] = ord($user_input[$j]);
+            $char[$index_char] = ord($user_input[$j]);
             $j++;
             break;
+
 
         case "[":
             if ($char[$index_char] == 0) {
