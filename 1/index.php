@@ -1,4 +1,5 @@
 <?php
+include "index.html";
 $text = $_REQUEST["text"];
 $user_input = $_REQUEST["user_input"];
 
