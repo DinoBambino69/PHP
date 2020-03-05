@@ -26,17 +26,17 @@ function getText($text) {
         $index++;
     }
 
+
     foreach ($text_array as $value) {
-        print $value . "<br>";
+        $array_sort[$k] = explode(" ", $value);
+        $k++;
     }
 
-//    foreach ($text_array as $value) {
-//        $array_sort[$k] = explode(" ", $value);
-//        $k++;
-//    }
+    uasort($array_sort, function ($s1, $s2){
+       return strcmp(strtolower($s1[1]), strtolower($s2[1]));
+    });
 
-//    uasort($array_sort, function ($s1, $s2){
-//       print strcmp($s1[1], $s2[1]);
-//    });
-
+    foreach ($array_sort as $value) {
+        print implode(" ", $value) . "<br>";
+    }
 }
