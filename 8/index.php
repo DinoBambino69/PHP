@@ -13,6 +13,7 @@
     }
 
 </style>
+
 <?php
 if (isset($_POST["month"])) {
     $varMonth = $_POST["month"];
