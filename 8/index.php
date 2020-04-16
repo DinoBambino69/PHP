@@ -3,6 +3,7 @@
         padding: 5px;
         border-bottom: 1px solid black;
     }
+
     .weekend {
         color: red;
     }
@@ -25,7 +26,7 @@ if (isset($_POST["month"])) {
     $daysName = array('Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс');
     $calendar .= '<tr>';
     for ($i = 0; $i <= 6; $i++) {
-        $calendar.= '<th class="dayName';
+        $calendar .= '<th class="dayName';
 
         if ($i != 0) {
             if (($i % 5 == 0) || ($i % 6 == 0)) {
@@ -38,55 +39,42 @@ if (isset($_POST["month"])) {
     }
     $calendar .= '</tr>';
 
-    $day = date('w', mktime(0, 0, 0, $varMonth, 1, date('Y')));
-    $day = $day - 1;
-    if ($day == -1) {
-        $day = 6;
-    }
-
-    $days_in_month = date('t', mktime(0, 0, 0, $varMonth, 1, date('Y')));
+    $arrweek = array();
     $counter = 0;
-    $days_in_week = 1;
+    $begin = new DateTime();
+    $begin->setDate(date('Y'), $varMonth, 1);
+    $step = new DateInterval('P1D');
+    $period = new DatePeriod($begin, $step, date('t', mktime(0, 0, 0, $varMonth)) - 1);
 
-    $calendar .= '<tr>';
-
-    for ($i = 0; $i < $day; $i++) {
-        $calendar .= '<td></td>';
-        $days_in_week++;
+    foreach ($period as $value) {
+        $days_in_week = date('w', $value->getTimestamp());
+        $days_in_week--;
+        if ($days_in_week == -1) {
+            $days_in_week = 6;
+        }
+        $arrweek[$counter][$days_in_week] = date('d', $value->getTimestamp());
+        if ($days_in_week == 6) $counter++;
     }
 
-    for ($i = 1; $i <= $days_in_month; $i++) {
-        $calendar .= '<td class="';
 
-        if ($day != 0) {
-            if (($day % 5 == 0) || ($day % 6 == 0)) {
-                $calendar .= ' weekend';
-            }
+    for ($i = 0; $i < count($arrweek); $i++) {
+        $calendar .= "<tr>";
+        for ($j = 0; $j < 7; $j++) {
+            if (!empty($arrweek[$i][$j])) {
+                if ($varMonth == date("m") && $arrweek[$i][$j] == date('d')) {
+                    $calendar .= "<td class='now'><div>" . $arrweek[$i][$j] . "</div></td>";
+                }
+                elseif ($j == 6 || $j == 5) {
+                    $calendar .= "<td class='weekend'><div>" . $arrweek[$i][$j] . "</div></td>";
+                }
+                else $calendar .= "<td><div>" . $arrweek[$i][$j] . "</div></td>";
+
+            } else $calendar .= "<td></td>";
         }
-        if ($varMonth == date("m") && $i == date("d")) {
-            $calendar .= ' now';
-        }
-        $calendar .= '">';
-
-        $calendar .= '<div>' . $i . '</div>';
-        $calendar .= '</td>';
-
-        if ($day == 6) {
-            $calendar .= '</tr>';
-            if (($counter + 1) != $days_in_month) {
-                $calendar .= '<tr>';
-            }
-            $day = -1;
-            $days_in_week = 0;
-        }
-
-        $days_in_week++;
-        $day++;
-        $counter++;
+        $calendar .= "</tr>";
     }
 
-    $calendar .= '</tr>';
-    $calendar .= '</table>';
+    $calendar .= "</table>";
 
     echo $calendar;
 
