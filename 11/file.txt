@@ -1,0 +1,9 @@
+{
+    "type": "Hello",
+    "time": "06:31:05 pm",
+    "context": [
+        "It",
+        "is",
+        "work!"
+    ]
+}
