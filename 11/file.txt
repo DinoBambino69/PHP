@@ -1,9 +1,7 @@
 {
-    "type": "Hello",
-    "time": "06:31:05 pm",
+    "type": "Text",
+    "time": "06:45:51 pm",
     "context": [
-        "It",
-        "is",
-        "work!"
+        "022"
     ]
 }
