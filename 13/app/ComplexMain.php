@@ -1,13 +1,15 @@
 <?php
 
 namespace app;
+use function Sodium\compare;
+
 class ComplexMain
 {
 
     public float $first; //real
     public float $second; //complex
 
-    function __construct($first, $second)
+    function __construct($first = 0, $second = 0)
     {
         $this->first = $first;
         $this->second = $second;
@@ -18,35 +20,51 @@ class ComplexMain
         return "({$this->first},{$this->second})";
     }
 
-    function add($f, $s) : void
+    function getReal(): float
     {
-        $this->first += $f;
-        $this->second += $s;
+        return $this->first;
     }
 
-    function sub($num) : void
+    function getComplex(): float
     {
-        $this->first *= $num;
-        $this->second *= $num;
+        return $this->second;
     }
 
-    function mult($f, $s) : void
+    function add(ComplexMain $complexMain): void
+    {
+        $this->first += $complexMain->getReal();
+        $this->second += $complexMain->getComplex();
+    }
+
+    function sub(ComplexMain $complexMain): void
+    {
+        $this->first -= $complexMain->getReal();
+        $this->second -= $complexMain->getComplex();
+    }
+
+    function mult(ComplexMain $complexMain): void
     {
         $helperNum = $this->first;
-        $this->first = $this->first * $f - $this->second * $s;
-        $this->second = $helperNum * $s + $this->second * $f;
+        $this->first = $this->first * $complexMain->getReal() - $this->second * $complexMain->getComplex();
+        $this->second = $helperNum * $complexMain->getComplex() + $this->second * $complexMain->getReal();
     }
 
-    function div($f, $s) : void
+    function div(ComplexMain $complexMain): void
     {
-        if ($f != 0 && $s != 0) {
+        if ($complexMain->getReal() != 0 && $complexMain->getComplex() != 0) {
             $helperNum = $this->first;
-            $this->first = (($this->first * $f) + ($this->second * $s)) / (pow($f, 2) + pow($s, 2));
-            $this->second = (($this->second * $f) - ($helperNum * $s)) / (pow($f, 2) + pow($s, 2));
+
+            $this->first = (($this->first * $complexMain->getReal()) + ($this->second * $complexMain->getComplex()))
+                /
+                (pow($complexMain->getReal(), 2) + pow($complexMain->getComplex(), 2));
+
+            $this->second = (($this->second * $complexMain->getReal()) - ($helperNum * $complexMain->getComplex()))
+                /
+                (pow($complexMain->getReal(), 2) + pow($complexMain->getComplex(), 2));
         } else echo "Error! Div 0!";
     }
 
-    function abs() : float
+    function abs(): float
     {
         return sqrt(pow($this->first, 2) + pow($this->second, 2));
     }
