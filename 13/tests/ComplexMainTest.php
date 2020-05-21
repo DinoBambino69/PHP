@@ -36,4 +36,15 @@ class ComplexMainTest extends TestCase {
         $main = new ComplexMain(2, 2);
         self::assertTrue("1" != $main->abs());
     }
+
+    function testDiv0() {
+        $main = new ComplexMain(1, 1);
+        $main->div(0, 0);
+        self::expectOutputString("Error! Div 0!");
+    }
+
+    function testToString() {
+        $main = new ComplexMain(1, 1);
+        self::assertTrue("(1,1)" == $main->__toString());
+    }
 }
